@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+        
+
+model Segment {
+  dbId String @id @unique @default(uuid())
+  amount String
+  exponent Int
+  duration String
+}
+
+model StreamClaimed {
+  dbId String @id @unique @default(uuid())
+  stream_id String
+  claimed_by String
+  amount String
+  remaining_balance String
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+}
+
+model StreamCreated {
+  dbId String @id @unique @default(uuid())
+  stream_id String
+  sender String
+  amount String
+  start_time String
+  end_time String
+  token String
+  cliff String
+  segments Json[]
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+}
+
+model StreamDestroyed {
+  dbId String @id @unique @default(uuid())
+  stream_id String
+  destroyed_by String
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+}
+
+
+model cursor {
+  id        String @id
+  eventSeq  String
+  txDigest  String
+}
